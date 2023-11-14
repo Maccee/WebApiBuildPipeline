@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Azure_02_Web_API_Build_Pipeline.Models;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Azure_02_Web_API_Build_Pipeline.Data;
+using Azure_02_Web_API_Build_Pipeline.Models;
 
 namespace Azure_02_Web_API_Build_Pipeline.Controllers
 {
@@ -10,34 +9,17 @@ namespace Azure_02_Web_API_Build_Pipeline.Controllers
     [Route("[controller]")]
     public class PaavontunnitController : ControllerBase
     {
-        private readonly PaavontunnitsqldatabaseContext _context;
+        private readonly PaavontunnitContext _context;
 
-        public PaavontunnitController(PaavontunnitsqldatabaseContext context)
+        public PaavontunnitController(PaavontunnitContext context)
         {
             _context = context;
         }
 
-        // GET: /Paavontunnit
         [HttpGet]
-        public async Task<IActionResult> GetPaavontunnits()
+        public async Task<ActionResult<IEnumerable<Paavontunnit>>> GetMessages()
         {
-            var paavontunnits = await _context.Paavontunnits.ToListAsync();
-            return Ok(paavontunnits);
-        }
-
-        // GET: /Paavontunnit/{id}
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetPaavontunnit(int id)
-        {
-            var paavontunnit = await _context.Paavontunnits
-                .FirstOrDefaultAsync(e => e.Id == id);
-
-            if (paavontunnit == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(paavontunnit);
+            return await _context.Paavontunnit.ToListAsync();
         }
     }
 }
